@@ -1,75 +1,74 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
-	"auth_go/app/models"
+	"auth_go/app/services"
+	. "auth_go/app/types"
 
 	"github.com/gin-gonic/gin"
 )
 
-type RegisterInput struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-}
-
-type LoginInput struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-}
-
 func Register(c *gin.Context) {
-	var input RegisterInput
+	var input AuthRequest
+	var response RegisterResponse
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		response = RegisterResponse{
+			Error: err.Error(),
+			User:  UserResponse{},
+		}
+		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	user := models.User{}
-
-	user.Email = input.Email
-	user.Password = input.Password
-
-	_, err := user.SaveUser()
+	user, err := services.RegisterUser(input)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		response = RegisterResponse{
+			Error: err.Error(),
+			User:  UserResponse{},
+		}
+		c.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User created",
-	})
+	response = RegisterResponse{
+		Error: "",
+		User:  user,
+	}
+	c.JSON(http.StatusOK, response)
 
 }
 
 func Login(c *gin.Context) {
-	fmt.Println("Login")
-	var input LoginInput
+	var input AuthRequest
+	var response LoginResponse
+	var status int
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
+		response = LoginResponse{
+			Error: err.Error(),
+			Token: "",
+		}
+		status = http.StatusBadRequest
+		c.JSON(status, response)
 		return
 	}
 
-	token, err := models.LoginCheck(input.Email, input.Password)
+	token, err := services.LoginUser(input)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		response = LoginResponse{
+			Error: err.Error(),
+			Token: "",
+		}
+	} else {
+		response = LoginResponse{
+			Error: "",
+			Token: token,
+		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
-	})
+	c.JSON(status, response)
 }

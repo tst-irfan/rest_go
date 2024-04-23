@@ -1,7 +1,6 @@
 package models
 
 import (
-	"auth_go/app/utils/token"
 	"html"
 	"strings"
 
@@ -17,11 +16,6 @@ type User struct {
 }
 
 func (user *User) SaveUser() (*User, error) {
-	existingUser, _ := GetUserByEmail(user.Email)
-
-	if existingUser.Email != "" {
-		return &User{}, errors.New("Email already exists")
-	}
 
 	err := DB.Create(&user).Error
 	if err != nil {
@@ -47,31 +41,12 @@ func VerifyPassword(providedPassword, password string) (bool, error) {
 	return true, nil
 }
 
-func LoginCheck(email string, password string) (string, error) {
-	var err error
-	var isPasswordMatch bool
-
-	user, err := GetUserByEmail(email)
-	if err != nil {
-		return "", err
-	}
-
-	isPasswordMatch, err = VerifyPassword(password, user.Password)
-
-	if !isPasswordMatch {
-		return "", err
-	}
-
-	token, err := token.GenerateToken(user.ID)
-
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
-}
-
 func (u *User) BeforeSave() error {
+	existingUser, _ := GetUserByEmail(u.Email)
+
+	if existingUser.Email != "" {
+		return errors.New("Email already exists")
+	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	if err != nil {
