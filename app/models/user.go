@@ -4,6 +4,8 @@ import (
 	"html"
 	"strings"
 
+	"auth_go/app/types"
+
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
@@ -57,4 +59,13 @@ func (u *User) BeforeSave() error {
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
 
 	return nil
+}
+
+func BuildUserAtributes(user User) types.UserResponse {
+	return types.UserResponse{
+		Id:        user.ID,
+		Email:     user.Email,
+		CreatedAt: user.CreatedAt.String(),
+		UpdatedAt: user.UpdatedAt.String(),
+	}
 }

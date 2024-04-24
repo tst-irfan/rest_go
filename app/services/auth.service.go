@@ -2,12 +2,12 @@ package services
 
 import (
 	"auth_go/app/models"
-	. "auth_go/app/types"
+	"auth_go/app/types"
 	"auth_go/app/utils/token"
 	"errors"
 )
 
-func RegisterUser(input AuthRequest) (UserResponse, error) {
+func RegisterUser(input types.AuthRequest) (types.UserResponse, error) {
 	user := models.User{}
 
 	user.Email = input.Email
@@ -15,15 +15,15 @@ func RegisterUser(input AuthRequest) (UserResponse, error) {
 
 	newUser, err := user.SaveUser()
 	if err != nil {
-		return UserResponse{}, err
+		return types.UserResponse{}, err
 	}
 
 	user = *newUser
 
-	return buildUserAtributes(user), nil
+	return models.BuildUserAtributes(user), nil
 }
 
-func LoginUser(input AuthRequest) (string, error) {
+func LoginUser(input types.AuthRequest) (string, error) {
 
 	user, err := models.GetUserByEmail(input.Email)
 	if err != nil {
@@ -47,11 +47,4 @@ func LoginUser(input AuthRequest) (string, error) {
 	return token, nil
 }
 
-func buildUserAtributes(user models.User) UserResponse {
-	return UserResponse{
-		Id:        user.ID,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt.String(),
-		UpdatedAt: user.UpdatedAt.String(),
-	}
-}
+

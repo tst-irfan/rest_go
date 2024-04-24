@@ -2,14 +2,14 @@ package main
 
 import (
 	"auth_go/app/models"
-	"auth_go/config"
+	"auth_go/configs"
 )
 
 func main() {
 
 	models.ConnectDataBase()
 
-	r := config.Router()
+	r := configs.Router()
 
 	r.Run(":8080")
 }

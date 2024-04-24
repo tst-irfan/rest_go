@@ -1,0 +1,18 @@
+package configs
+
+import (
+	"auth_go/configs/routers"
+
+	"github.com/gin-gonic/gin"
+)
+
+func Router() *gin.Engine {
+	r := gin.Default()
+
+	public := r.Group("/api")
+
+	routers.SetupAuthRoutes(public)
+	routers.SetupProfileRoutes(public)
+
+	return r
+}

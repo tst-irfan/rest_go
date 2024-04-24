@@ -24,7 +24,6 @@ func ConnectDataBase() {
 	DbName := os.Getenv("DB_NAME")
 	DbPort := os.Getenv("DB_PORT")
 
-	// Adjusted the DBURL format for PostgreSQL
 	DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", DbHost, DbPort, DbUser, DbName, DbPassword)
 
 	DB, err = gorm.Open("postgres", DBURL)
@@ -35,6 +34,6 @@ func ConnectDataBase() {
 		fmt.Println("We are connected to the database")
 	}
 
-	// Assuming you have a User model defined somewhere
 	DB.AutoMigrate(&User{})
+	DB.AutoMigrate(&Profile{})
 }
