@@ -8,7 +8,7 @@ import (
 
 func Router() *gin.Engine {
 	r := gin.Default()
-
+	r.Use(Middleware())
 	public := r.Group("/api")
 
 	routers.SetupAuthRoutes(public)

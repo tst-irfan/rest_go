@@ -59,6 +59,15 @@ func (profile *Profile) DeleteProfile() error {
 	return nil
 }
 
+func GetProfileByUserID(userID uint) (*Profile, error) {
+	var profile Profile
+	err := DB.Where("user_id = ?", userID).First(&profile).Error
+	if err != nil {
+		return nil, err
+	}
+	return &profile, nil
+}
+
 func GetUser(userID uint) User {
 	var user User
 	DB.Where("id = ?", userID).First(&user)

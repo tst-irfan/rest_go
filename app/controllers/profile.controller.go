@@ -51,9 +51,32 @@ func GetProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+func ShowMyProfile(c *gin.Context) {
+	var response types.ProfileResponse
+	userID := c.MustGet("UserID").(uint)
+
+	profile, err := services.GetProfileByUserID(userID)
+
+	if err != nil {
+		response = types.ProfileResponse{
+			Error:   err.Error(),
+			Profile: types.Profile{},
+		}
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response = types.ProfileResponse{
+		Error:   "",
+		Profile: profile,
+	}
+	c.JSON(http.StatusOK, response)
+}
+
 func SaveProfile(c *gin.Context) {
 	var input types.ProfileRequest
 	var response types.ProfileResponse
+	userID := c.MustGet("UserID").(uint)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		response = types.ProfileResponse{
@@ -64,7 +87,7 @@ func SaveProfile(c *gin.Context) {
 		return
 	}
 
-	profile, err := services.CreateProfile(input)
+	profile, err := services.CreateProfile(input, userID)
 
 	if err != nil {
 		response = types.ProfileResponse{
@@ -89,16 +112,7 @@ func UpdateProfile(c *gin.Context) {
 	var input types.ProfileRequest
 	var response types.ProfileResponse
 
-	IDStr := c.Param("id")
-	ID, err := strconv.ParseUint(IDStr, 10, 64)
-	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
-		return
-	}
+	ID := c.MustGet("UserID").(uint)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		response = types.ProfileResponse{

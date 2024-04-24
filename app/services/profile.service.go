@@ -14,12 +14,12 @@ func ShowAllProfiles() ([]types.Profile, error) {
 	return models.BuildProfilesAttributes(profiles), nil
 }
 
-func CreateProfile(input types.ProfileRequest) (types.Profile, error) {
+func CreateProfile(input types.ProfileRequest, userID uint) (types.Profile, error) {
 	profile := models.Profile{
 		FirstName: input.FirstName,
 		LastName:  input.LastName,
 		DoB:       input.DoB,
-		UserID:    input.UserId,
+		UserID:    userID,
 	}
 
 	createdProfile, err := profile.SaveProfile()
@@ -30,8 +30,8 @@ func CreateProfile(input types.ProfileRequest) (types.Profile, error) {
 	return models.BuildProfileAttributes(createdProfile), nil
 }
 
-func GetProfileByID(userID uint) (types.Profile, error) {
-	profile, err := models.GetProfileByID(userID)
+func GetProfileByID(ID uint) (types.Profile, error) {
+	profile, err := models.GetProfileByID(ID)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -39,8 +39,16 @@ func GetProfileByID(userID uint) (types.Profile, error) {
 	return models.BuildProfileAttributes(profile), nil
 }
 
+func GetProfileByUserID(userID uint) (types.Profile, error) {
+	profile, err := models.GetProfileByUserID(userID)
+	if err != nil {
+		return types.Profile{}, err
+	}
+	return models.BuildProfileAttributes(profile), nil
+}
+
 func UpdateProfile(input types.ProfileRequest, ID uint) (types.Profile, error) {
-	profile, err := models.GetProfileByID(ID)
+	profile, err := models.GetProfileByUserID(ID)
 	if err != nil {
 		return types.Profile{}, err
 	}
