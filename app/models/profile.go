@@ -74,6 +74,12 @@ func GetUser(userID uint) User {
 	return user
 }
 
+func (profile *Profile) GetUser() User {
+	var user User
+	DB.Where("id = ?", profile.UserID).First(&user)
+	return user
+}
+
 func (p *Profile) BeforeCreate() error {
 	if checkProfileExists(p.UserID) {
 		return errors.New("Profile already exists")

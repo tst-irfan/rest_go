@@ -13,6 +13,7 @@ require (
 )
 
 require (
+	github.com/brianvoe/gofakeit/v7 v7.0.2 // indirect
 	github.com/bytedance/sonic v1.11.4 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/cloudwego/base64x v0.1.0 // indirect

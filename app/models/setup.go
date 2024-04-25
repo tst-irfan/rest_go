@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"path/filepath"
+
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -12,8 +14,14 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDataBase() {
-	err := godotenv.Load(".env")
+func ConnectDataBase(env string) {
+	var err error
+	if env == "test" {
+		err = godotenv.Load(filepath.Join("..", "..", ".env.test"))
+	} else {
+		file := ".env." + env
+		err = godotenv.Load(file)
+	}
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
