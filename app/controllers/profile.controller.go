@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"auth_go/app/helpers"
-	"auth_go/app/services"
-	"auth_go/app/types"
 	"net/http"
+	"rest_go/app/helpers"
+	"rest_go/app/services"
+	"rest_go/app/types"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -87,7 +87,7 @@ func UpdateProfile(c *gin.Context) {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	helpers.ResponseSuccess(c, "Profile has been updated", profile, http.StatusOK)
 }
 

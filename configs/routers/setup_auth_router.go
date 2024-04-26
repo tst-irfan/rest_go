@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"auth_go/app/controllers"
+	"rest_go/app/controllers"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"auth_go/configs/routers"
+	"rest_go/configs/routers"
 
 	"github.com/gin-gonic/gin"
 )

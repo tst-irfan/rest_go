@@ -1,15 +1,14 @@
 package models_test
 
 import (
-	"auth_go/app/models"
-	"auth_go/tests"
-	"auth_go/tests/factories"
+	"rest_go/app/models"
+	"rest_go/tests"
+	"rest_go/tests/factories"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"golang.org/x/crypto/bcrypt"
 )
-
 
 func TestSaveUser(t *testing.T) {
 	tests.Setup()

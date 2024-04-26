@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"auth_go/app/types"
+	"rest_go/app/types"
 
 	"github.com/jinzhu/gorm"
 )

@@ -1,9 +1,9 @@
 package models_test
 
 import (
-	"auth_go/app/models"
-	"auth_go/tests"
-	"auth_go/tests/factories"
+	"rest_go/app/models"
+	"rest_go/tests"
+	"rest_go/tests/factories"
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
@@ -167,4 +167,3 @@ func TestGetUser(t *testing.T) {
 		t.Errorf("Expected user ID to be %v, but got %v", profile.UserID, data.ID)
 	}
 }
-

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"auth_go/app/models"
-	. "auth_go/configs"
-	"github.com/joho/godotenv"
 	"os"
+	"rest_go/app/models"
+	. "rest_go/configs"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {

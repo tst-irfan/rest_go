@@ -1,8 +1,8 @@
 package tests
 
 import (
-	"auth_go/app/models"
 	"log"
+	"rest_go/app/models"
 )
 
 func Setup() {

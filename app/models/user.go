@@ -4,7 +4,7 @@ import (
 	"html"
 	"strings"
 
-	"auth_go/app/types"
+	"rest_go/app/types"
 
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"

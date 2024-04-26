@@ -1,7 +1,7 @@
 package factories
 
 import (
-	"auth_go/app/models"
+	"rest_go/app/models"
 
 	"github.com/brianvoe/gofakeit/v7"
 )

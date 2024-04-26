@@ -1,8 +1,8 @@
 package services
 
 import (
-	"auth_go/app/models"
-	"auth_go/app/types"
+	"rest_go/app/models"
+	"rest_go/app/types"
 )
 
 func ShowAllProfiles() ([]types.Profile, error) {

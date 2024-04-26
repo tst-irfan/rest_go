@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
-	"auth_go/app/helpers"
-	"auth_go/app/services"
-	. "auth_go/app/types"
+	"rest_go/app/helpers"
+	"rest_go/app/services"
+	. "rest_go/app/types"
 
 	"github.com/gin-gonic/gin"
 )

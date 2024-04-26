@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"auth_go/app/types"
+	"rest_go/app/types"
 
 	"github.com/gin-gonic/gin"
 )

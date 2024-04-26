@@ -1,4 +1,4 @@
-module auth_go
+module rest_go
 
 go 1.22.2
 

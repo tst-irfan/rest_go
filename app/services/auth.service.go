@@ -1,10 +1,10 @@
 package services
 
 import (
-	"auth_go/app/models"
-	"auth_go/app/types"
-	"auth_go/app/utils/token"
 	"errors"
+	"rest_go/app/models"
+	"rest_go/app/types"
+	"rest_go/app/utils/token"
 )
 
 func RegisterUser(input types.AuthRequest) (types.UserResponse, error) {
@@ -46,5 +46,3 @@ func LoginUser(input types.AuthRequest) (string, error) {
 
 	return token, nil
 }
-
-

@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"auth_go/configs/middlewares"
+	"rest_go/configs/middlewares"
 
 	"github.com/gin-gonic/gin"
 )

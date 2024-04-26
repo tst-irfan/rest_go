@@ -1,12 +1,11 @@
 package middlewares
 
 import (
-	"auth_go/app/utils/token"
-	"auth_go/app/helpers"
 	"net/http"
+	"rest_go/app/helpers"
+	"rest_go/app/utils/token"
 
 	"github.com/gin-gonic/gin"
-
 )
 
 func AuthorizeRequest(c *gin.Context) {
