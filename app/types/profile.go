@@ -7,7 +7,3 @@ type Profile struct {
 	DoB       string `json:"dob"`
 	User 			UserResponse `json:"user"`
 }
-type ProfileResponse struct {
-	Profile Profile `json:"profile"`
-	Error   string  `json:"error"`	
-}

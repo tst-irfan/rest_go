@@ -1,21 +1,24 @@
 package middlewares
 
 import (
-	. "auth_go/app/utils/token"
+	"auth_go/app/utils/token"
+	"auth_go/app/helpers"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+
 )
 
 func AuthorizeRequest(c *gin.Context) {
-	err := TokenValid(c)
+	err := token.TokenValid(c)
 	if err != nil {
-		c.JSON(401, gin.H{"error": "Unauthorized"})
+		helpers.ResponseError(c, err.Error(), http.StatusUnauthorized)
 		c.Abort()
 		return
 	}
-	id, err := ExtractTokenID(c)
+	id, err := token.ExtractTokenID(c)
 	if err != nil {
-		c.JSON(401, gin.H{"error": "Unauthorized"})
+		helpers.ResponseError(c, err.Error(), http.StatusUnauthorized)
 		c.Abort()
 		return
 	}

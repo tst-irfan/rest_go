@@ -1,8 +1,6 @@
 package configs
 
 import (
-	"log"
-
 	"auth_go/configs/middlewares"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +11,6 @@ func Middleware() gin.HandlerFunc {
 		if !skipAuth[c.FullPath()] {
 			middlewares.AuthorizeRequest(c)
 		}
-		log.Println("Before the request is processed")
 		c.Next()
 	}
 }

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"auth_go/app/helpers"
 	"auth_go/app/services"
 	"auth_go/app/types"
 	"net/http"
@@ -12,134 +13,82 @@ import (
 func ShowAllProfiles(c *gin.Context) {
 	profiles, err := services.ShowAllProfiles()
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, profiles)
+	helpers.ResponseSuccess(c, "Profiles found", profiles, http.StatusOK)
 }
 
 func GetProfile(c *gin.Context) {
-	var response types.ProfileResponse
-
 	IDStr := c.Param("id")
 	ID, err := strconv.ParseUint(IDStr, 10, 64)
 	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	profile, err := services.GetProfileByID(uint(ID))
 
 	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	response = types.ProfileResponse{
-		Error:   "",
-		Profile: profile,
-	}
-	c.JSON(http.StatusOK, response)
+	helpers.ResponseSuccess(c, "Profile found", profile, http.StatusOK)
 }
 
 func ShowMyProfile(c *gin.Context) {
-	var response types.ProfileResponse
 	userID := c.MustGet("UserID").(uint)
 
 	profile, err := services.GetProfileByUserID(userID)
 
 	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	response = types.ProfileResponse{
-		Error:   "",
-		Profile: profile,
-	}
-	c.JSON(http.StatusOK, response)
+	helpers.ResponseSuccess(c, "Profile found", profile, http.StatusOK)
 }
 
 func SaveProfile(c *gin.Context) {
 	var input types.ProfileRequest
-	var response types.ProfileResponse
 	userID := c.MustGet("UserID").(uint)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	profile, err := services.CreateProfile(input, userID)
 
 	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	response = types.ProfileResponse{
-		Error:   "",
-		Profile: profile,
-	}
-	c.JSON(http.StatusOK, response)
+	helpers.ResponseSuccess(c, "Profile has been created", profile, http.StatusCreated)
 
 }
 
-
-
 func UpdateProfile(c *gin.Context) {
 	var input types.ProfileRequest
-	var response types.ProfileResponse
 
 	ID := c.MustGet("UserID").(uint)
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	profile, err := services.UpdateProfile(input, uint(ID))
 
 	if err != nil {
-		response = types.ProfileResponse{
-			Error:   err.Error(),
-			Profile: types.Profile{},
-		}
-		c.JSON(http.StatusBadRequest, response)
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	response = types.ProfileResponse{
-		Error:   "",
-		Profile: profile,
-	}
-	c.JSON(http.StatusOK, response)
-
+	
+	helpers.ResponseSuccess(c, "Profile has been updated", profile, http.StatusOK)
 }
 
 func DeleteProfile(c *gin.Context) {
@@ -147,15 +96,15 @@ func DeleteProfile(c *gin.Context) {
 	IDStr := c.Param("id")
 	ID, err := strconv.ParseUint(IDStr, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	err = services.DeleteProfile(uint(ID))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	c.JSON(http.StatusOK, "Profile deleted successfully")
+	helpers.ResponseSuccess(c, "Profile has been deleted", "", http.StatusOK)
 }
