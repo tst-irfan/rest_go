@@ -44,4 +44,5 @@ func ConnectDataBase(env string) {
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&Profile{})
+	DB.LogMode(true)
 }

@@ -17,56 +17,7 @@ type Profile struct {
 	DoB       time.Time `json:"dob"`
 }
 
-func GetAllProfiles() ([]Profile, error) {
-	var profiles []Profile
-	err := DB.Find(&profiles).Error
-	if err != nil {
-		return nil, err
-	}
-	return profiles, nil
-}
-
-func GetProfileByID(ID uint) (*Profile, error) {
-	var profile Profile
-	err := DB.Where("id = ?", ID).First(&profile).Error
-	if err != nil {
-		return nil, err
-	}
-	return &profile, nil
-}
-
-func (profile *Profile) SaveProfile() (*Profile, error) {
-	err := DB.Create(&profile).Error
-	if err != nil {
-		return &Profile{}, err
-	}
-	return profile, nil
-}
-
-func (profile *Profile) UpdateProfile() (*Profile, error) {
-	err := DB.Save(&profile).Error
-	if err != nil {
-		return &Profile{}, err
-	}
-	return profile, nil
-}
-
-func (profile *Profile) DeleteProfile() error {
-	err := DB.Delete(&profile).Error
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func GetProfileByUserID(userID uint) (*Profile, error) {
-	var profile Profile
-	err := DB.Where("user_id = ?", userID).First(&profile).Error
-	if err != nil {
-		return nil, err
-	}
-	return &profile, nil
-}
+var ProfileQuery = QueryHelper[Profile]{}
 
 func GetUser(userID uint) User {
 	var user User

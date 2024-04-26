@@ -17,23 +17,7 @@ type User struct {
 	Password string `gorm:"size:255;not null;" json:"password"`
 }
 
-func (user *User) SaveUser() (*User, error) {
-
-	err := DB.Create(&user).Error
-	if err != nil {
-		return &User{}, err
-	}
-	return user, nil
-}
-
-func GetUserByEmail(email string) (*User, error) {
-	var user User
-	err := DB.Where("email = ?", email).First(&user).Error
-	if err != nil {
-		return &User{}, err
-	}
-	return &user, nil
-}
+var UserQuery = QueryHelper[User]{}
 
 func VerifyPassword(providedPassword, password string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(password), []byte(providedPassword))
@@ -44,9 +28,8 @@ func VerifyPassword(providedPassword, password string) (bool, error) {
 }
 
 func (u *User) BeforeSave() error {
-	existingUser, _ := GetUserByEmail(u.Email)
-
-	if existingUser.Email != "" {
+	_, err := UserQuery.FindOneByColumn("email", u.Email)
+	if err == nil {
 		return errors.New("Email already exists")
 	}
 

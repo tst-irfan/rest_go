@@ -6,7 +6,7 @@ import (
 )
 
 func ShowAllProfiles() ([]types.Profile, error) {
-	profiles, err := models.GetAllProfiles()
+	profiles, err := models.ProfileQuery.FindAll()
 	if err != nil {
 		return []types.Profile{}, err
 	}
@@ -22,7 +22,7 @@ func CreateProfile(input types.ProfileRequest, userID uint) (types.Profile, erro
 		UserID:    userID,
 	}
 
-	createdProfile, err := profile.SaveProfile()
+	createdProfile, err := models.ProfileQuery.Create(profile)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -31,7 +31,7 @@ func CreateProfile(input types.ProfileRequest, userID uint) (types.Profile, erro
 }
 
 func GetProfileByID(ID uint) (types.Profile, error) {
-	profile, err := models.GetProfileByID(ID)
+	profile, err := models.ProfileQuery.FindByID(ID)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -40,7 +40,7 @@ func GetProfileByID(ID uint) (types.Profile, error) {
 }
 
 func GetProfileByUserID(userID uint) (types.Profile, error) {
-	profile, err := models.GetProfileByUserID(userID)
+	profile, err := models.ProfileQuery.FindOneByColumn("user_id", userID)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -48,7 +48,7 @@ func GetProfileByUserID(userID uint) (types.Profile, error) {
 }
 
 func UpdateProfile(input types.ProfileRequest, ID uint) (types.Profile, error) {
-	profile, err := models.GetProfileByUserID(ID)
+	profile, err := models.ProfileQuery.FindOneByColumn("user_id", ID)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -57,7 +57,7 @@ func UpdateProfile(input types.ProfileRequest, ID uint) (types.Profile, error) {
 	profile.LastName = input.LastName
 	profile.DoB = input.DoB
 
-	updatedProfile, err := profile.UpdateProfile()
+	updatedProfile, err := models.ProfileQuery.Update(*profile)
 	if err != nil {
 		return types.Profile{}, err
 	}
@@ -66,12 +66,12 @@ func UpdateProfile(input types.ProfileRequest, ID uint) (types.Profile, error) {
 }
 
 func DeleteProfile(userID uint) error {
-	profile, err := models.GetProfileByID(userID)
+	profile, err :=  models.ProfileQuery.FindOneByColumn("user_id", userID)
 	if err != nil {
 		return err
 	}
 
-	err = profile.DeleteProfile()
+	err = models.ProfileQuery.DeleteByID(profile.ID)
 	if err != nil {
 		return err
 	}

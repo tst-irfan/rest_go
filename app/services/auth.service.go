@@ -13,7 +13,7 @@ func RegisterUser(input types.AuthRequest) (types.UserResponse, error) {
 	user.Email = input.Email
 	user.Password = input.Password
 
-	newUser, err := user.SaveUser()
+	newUser, err := models.UserQuery.Create(user)
 	if err != nil {
 		return types.UserResponse{}, err
 	}
@@ -25,7 +25,7 @@ func RegisterUser(input types.AuthRequest) (types.UserResponse, error) {
 
 func LoginUser(input types.AuthRequest) (string, error) {
 
-	user, err := models.GetUserByEmail(input.Email)
+	user, err := models.UserQuery.FindOneByColumn("email", input.Email)
 	if err != nil {
 		return "", errors.New("Invalid credentials")
 	}
