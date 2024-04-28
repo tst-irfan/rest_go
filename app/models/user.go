@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"rest_go/app/types"
+	"rest_go/db"
 
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -17,7 +18,7 @@ type User struct {
 	Password string `gorm:"size:255;not null;" json:"password"`
 }
 
-var UserQuery = QueryHelper[User]{}
+var UserQuery = db.QueryHelper[User]{}
 
 func VerifyPassword(providedPassword, password string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(password), []byte(providedPassword))
@@ -44,7 +45,7 @@ func (u *User) BeforeSave() error {
 	return nil
 }
 
-func BuildUserAtributes(user User) types.UserResponse {
+func BuildUserAtributes(user *User) types.UserResponse {
 	return types.UserResponse{
 		Id:        user.ID,
 		Email:     user.Email,

@@ -5,29 +5,35 @@ import (
 	"time"
 
 	"rest_go/app/types"
+	"rest_go/db"
 
 	"github.com/jinzhu/gorm"
 )
 
 type Profile struct {
 	gorm.Model
+	User      User      `json:"user"`
 	UserID    uint      `json:"user_id"`
 	FirstName string    `gorm:"size:255;not null;" json:"first_name"`
 	LastName  string    `gorm:"size:255;not null;" json:"last_name"`
 	DoB       time.Time `json:"dob"`
 }
 
-var ProfileQuery = QueryHelper[Profile]{}
+var ProfileQuery = db.QueryHelper[Profile]{}
 
-func GetUser(userID uint) User {
-	var user User
-	DB.Where("id = ?", userID).First(&user)
+func GetUser(userID uint) *User {
+	user, err := UserQuery.FindByID(userID)
+	if err != nil {
+		return &User{}
+	}
 	return user
 }
 
-func (profile *Profile) GetUser() User {
-	var user User
-	DB.Where("id = ?", profile.UserID).First(&user)
+func (profile *Profile) GetUser() *User {
+	user, err := UserQuery.FindByID(profile.UserID)
+	if err != nil {
+		return &User{}
+	}
 	return user
 }
 
@@ -50,15 +56,16 @@ func (p *Profile) BeforeDelete() error {
 }
 
 func checkUserExists(userId uint) bool {
-	var user User
-	DB.Where("id = ?", userId).First(&user)
+	user, err := UserQuery.FindByID(userId)
+	if err != nil {
+		return false
+	}
 	return user.ID != 0
 }
 
 func checkProfileExists(userId uint) bool {
-	var profile Profile
-	DB.Where("user_id = ?", userId).First(&profile)
-	return profile.UserID != 0
+	_, err := ProfileQuery.FindOneByColumn("user_id", userId)
+	return err == nil
 }
 
 func (p *Profile) BeforeUpdate() error {
@@ -69,7 +76,7 @@ func (p *Profile) BeforeUpdate() error {
 }
 
 func BuildProfileAttributes(profile *Profile) types.Profile {
-	user := GetUser(profile.UserID)
+	user := profile.GetUser()
 	userAttributes := BuildUserAtributes(user)
 	return types.Profile{
 		Id:        profile.ID,

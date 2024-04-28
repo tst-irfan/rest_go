@@ -20,7 +20,7 @@ func RegisterUser(input types.AuthRequest) (types.UserResponse, error) {
 
 	user = *newUser
 
-	return models.BuildUserAtributes(user), nil
+	return models.BuildUserAtributes(&user), nil
 }
 
 func LoginUser(input types.AuthRequest) (string, error) {

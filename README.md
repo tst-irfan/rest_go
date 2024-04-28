@@ -13,7 +13,7 @@
 
 ---
 
-<p align="center"> A simple REST API in Go with Gin and Gorm
+<p align="center"> A simple GO REST API with Gin and Gorm
     <br> 
 </p>
 
@@ -75,6 +75,8 @@ duplicate the .env.example file to .env.development and .env.test then fill in t
 ```bash
 cp .env.example .env.development
 cp .env.example .env.test
+cp .env.example .env.staging
+cp .env.example .env.production
 ```
 
 ### Running the server
@@ -95,17 +97,8 @@ End with an example of getting some data out of the system or using it for a lit
 
 ### Running the tests
 
-cd into the test directory
-
 ```bash
-cd tests/models
-
-```
-
-run the tests
-
-```bash
-go test
+go test ./...
 ```
 
 <br>
@@ -116,17 +109,29 @@ go test
 .
 ├── app
 │   ├── controllers
+│   ├── middlewares
+│   ├── router
 │   ├── models
 │   ├── services
 │   ├── utils
 │   ├── types
 ├── config
-│   ├── middlewares
-│   ├── router
-│   ├── middleware.go
-│   ├── router.go
+│   ├── config.go
+├── db
+│   ├── query.go
+│   ├── setup.go
+├── initializers
+│   ├── application.go
+│   ├── auto.migrate.go
 ├── tests
+│   ├── factories
+│   ├── modles
 main.go
+.env
+.env.development
+.env.test
+.env.staging
+.env.production
 ```
 ### Directories
 
@@ -139,11 +144,15 @@ main.go
 - **routers:** Here, you'll find router configurations responsible for directing incoming requests to the appropriate controllers or handlers.
 
 ### Files
-
-- **middleware.go:** This file defines and initializes middleware functions used in request processing, enhancing the application's extensibility and flexibility.
-- **router.go:** Defines and initializes router configurations, which play a crucial role in mapping incoming requests to the appropriate controller methods or handlers.
 - **main.go:** Serves as the entry point for the application, orchestrating the initialization and startup processes.
-
-
+- **initializer/application.go:** This file contains code responsible for initializing the application, such as setting up database connections, initializing logging frameworks, or configuring global settings. It ensures that the application is properly set up and ready to handle incoming requests.  
+- **initializer/auto_migrate.go:** This file contains code to automatically migrate database schemas or perform database migrations on application startup. It's responsible for ensuring that the database schema is up-to-date with the application's model definitions, making database management easier and more efficient.
+- **db/query.go:** Contains the `QueryHelper` struct and database query methods for interacting with the database. It encapsulates common database operations like querying, creating, updating, and deleting records.
+- **db/setup.go:** Contains database setup and initialization logic, such as establishing connections to the database, configuring database settings, and preparing the database for use by the application. It ensures that the database environment is properly configured and ready for use by other components of the application.
+- **.env:** Root environment file containing the `ENV` variable, which specifies the environment the application runs in. Valid values are `development`, `test`, `staging`, and `production`. Other environment-specific configurations can be set based on this variable.
+- **.env.development:** Development environment file containing configurations specific to the development environment. It may include settings tailored for local development, such as debug options or development database credentials.
+- **.env.test:** Test environment file containing configurations specific to the test environment. It includes settings required for running tests, such as test database credentials or test-specific configurations.
+- **.env.staging:** Staging environment file containing configurations specific to the staging environment. It includes settings required for staging deployments, such as staging database credentials or staging-specific configurations.
+- **.env.production:** Production environment file containing configurations specific to the production environment. It includes settings required for production deployments, such as production database credentials or production-specific configurations.
 
 

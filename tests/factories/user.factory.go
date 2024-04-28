@@ -7,20 +7,21 @@ import (
 )
 
 func GenerateUser() *models.User {
-	var userParams models.User
-	userParams.Email = gofakeit.Email()
-	userParams.Password = gofakeit.Password(true, true, true, false, false, 12)
-	user, err := userParams.SaveUser()
+	userParams := models.User{
+		Email:    gofakeit.Email(),
+		Password: gofakeit.Password(true, true, true, true, false, 14),
+	}
+	user, err := models.UserQuery.Create(userParams)
 	if err != nil {
 		panic(err)
 	}
 	return user
 }
 
-func GenerateUsers(n int) []models.User {
-	users := []models.User{}
-	for i := 0; i < n; i++ {
-		users = append(users, *GenerateUser()) // Dereference the pointer before appending
+func GenerateUsers(quantity int) []*models.User {
+	users := make([]*models.User, quantity)
+	for i := 0; i < quantity; i++ {
+		users[i] = GenerateUser()
 	}
 	return users
 }

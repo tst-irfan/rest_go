@@ -1,5 +1,7 @@
 .env
 .env.development
 .env.test
+.env.staging
+.env.production
 go.sum
 /tmp

@@ -1,15 +1,13 @@
-package configs
+package middlewares
 
 import (
-	"rest_go/configs/middlewares"
-
 	"github.com/gin-gonic/gin"
 )
 
 func Middleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !skipAuth[c.FullPath()] {
-			middlewares.AuthorizeRequest(c)
+			AuthorizeRequest(c)
 		}
 		c.Next()
 	}

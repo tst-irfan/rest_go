@@ -1,18 +1,17 @@
 package tests
 
 import (
-	"log"
-	"rest_go/app/models"
+	"rest_go/db"
+	"rest_go/initializer"
 )
 
-func Setup() {
-	env := "test"
-	models.ConnectDataBase(env)
+func SetupTest() {
+	db.ConnectDataBase("test")
+	initializer.AutoMigrate()
 }
 
-func Teardown() {
-	models.DB.Exec("TRUNCATE users CASCADE")
-	models.DB.Exec("TRUNCATE profiles CASCADE")
-	models.DB.Close()
-	log.Print("Teardown complete")
+func TeardownTest() {
+	db.DB.Exec("TRUNCATE users RESTART IDENTITY CASCADE")
+	db.DB.Exec("TRUNCATE profiles RESTART IDENTITY CASCADE")
+	db.DB.Close()
 }

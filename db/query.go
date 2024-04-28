@@ -1,4 +1,6 @@
-package models
+// path db/query.go
+
+package db
 
 type QueryHelper[T any] struct {
 	Model T
@@ -80,22 +82,6 @@ func (qh *QueryHelper[T]) FirstWhere(query interface{}, args ...interface{}) (*T
 		return nil, err
 	}
 	return &result, nil
-}
-
-func (qh *QueryHelper[T]) FirstOrCreate(query interface{}, data T) (*T, error) {
-	err := DB.Where(query).FirstOrCreate(&data).Error
-	if err != nil {
-		return nil, err
-	}
-	return &data, nil
-}
-
-func (qh *QueryHelper[T]) UpdateWhere(query interface{}, data T) (*T, error) {
-	err := DB.Where(query).Updates(data).Error
-	if err != nil {
-		return nil, err
-	}
-	return &data, nil
 }
 
 func (qh *QueryHelper[T]) DeleteWhere(query interface{}, args ...interface{}) error {
