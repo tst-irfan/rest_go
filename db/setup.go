@@ -12,16 +12,15 @@ import (
 
 var DB *gorm.DB
 
-
 func ConnectDataBase(env string) {
 	var err error
 	var envFile string
 
 	if env == "test" {
-		envFile = "../../.env.test"
+		envFile = "../.env.test"
 	} else {
 		envFile = ".env." + env
-	};
+	}
 	configs.LoadEnv(envFile)
 	if err != nil {
 		log.Fatalf("Error loading .env file")

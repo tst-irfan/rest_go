@@ -7,6 +7,9 @@ import (
 	"rest_go/app/types"
 	"rest_go/db"
 
+	"rest_go/app/helpers"
+	"strconv"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -20,6 +23,17 @@ type Profile struct {
 }
 
 var ProfileQuery = db.QueryHelper[Profile]{}
+var profileValidation = helpers.ValidationHelper{
+	RequiredFields:          []string{"FirstName", "LastName", "DoB", "UserID"},
+	ShouldGreaterThanFields: []helpers.Field{},
+	ShouldLessThanFields: []helpers.Field{
+		{
+			Name:  "DoB",
+			Type:  "time",
+			Value: strconv.FormatInt(time.Now().Unix(), 10),
+		},
+	},
+}
 
 func GetUser(userID uint) *User {
 	user, err := UserQuery.FindByID(userID)
@@ -38,6 +52,10 @@ func (profile *Profile) GetUser() *User {
 }
 
 func (p *Profile) BeforeCreate() error {
+	_, err := profileValidation.Validate(p)
+	if err != nil {
+		return err
+	}
 	if checkProfileExists(p.UserID) {
 		return errors.New("Profile already exists")
 	}
@@ -69,6 +87,10 @@ func checkProfileExists(userId uint) bool {
 }
 
 func (p *Profile) BeforeUpdate() error {
+	_, err := profileValidation.Validate(p)
+	if err != nil {
+		return err
+	}
 	if !checkProfileExists(p.UserID) {
 		return errors.New("Profile does not exist")
 	}

@@ -4,6 +4,7 @@ import (
 	"html"
 	"strings"
 
+	"rest_go/app/helpers"
 	"rest_go/app/types"
 	"rest_go/db"
 
@@ -19,6 +20,11 @@ type User struct {
 }
 
 var UserQuery = db.QueryHelper[User]{}
+var userValidation = helpers.ValidationHelper{
+	RequiredFields:          []string{"Email", "Password"},
+	ShouldGreaterThanFields: []helpers.Field{},
+	ShouldLessThanFields:    []helpers.Field{},
+}
 
 func VerifyPassword(providedPassword, password string) (bool, error) {
 	err := bcrypt.CompareHashAndPassword([]byte(password), []byte(providedPassword))
@@ -32,6 +38,11 @@ func (u *User) BeforeSave() error {
 	_, err := UserQuery.FindOneByColumn("email", u.Email)
 	if err == nil {
 		return errors.New("Email already exists")
+	}
+
+	_, err = userValidation.Validate(u)
+	if err != nil {
+		return err
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
