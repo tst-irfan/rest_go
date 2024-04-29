@@ -156,3 +156,11 @@ main.go
 - **.env.production:** Production environment file containing configurations specific to the production environment. It includes settings required for production deployments, such as production database credentials or production-specific configurations.
 
 
+## Postman Collection
+  
+  [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/30788320/2sA3BuWULJ)
+
+## Authors
+👤 [**Irfan Azhar**](http://github.com/tst-irfan)
+
+
