@@ -15,6 +15,15 @@ func (qh *QueryHelper[T]) FindAll() ([]T, error) {
 	return results, nil
 }
 
+func (qh *QueryHelper[T]) FindAllWithPagination(page int, size int) ([]T, error) {
+	var results []T
+	err := DB.Limit(size).Offset((page - 1) * size).Find(&results).Error
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
 func (qh *QueryHelper[T]) FindByID(ID uint) (*T, error) {
 	var result T
 	err := DB.Where("id = ?", ID).First(&result).Error
@@ -90,4 +99,13 @@ func (qh *QueryHelper[T]) DeleteWhere(query interface{}, args ...interface{}) er
 		return err
 	}
 	return nil
+}
+
+func (qh *QueryHelper[T]) Count() (int, error) {
+	var count int64
+	err := DB.Model(&qh.Model).Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+	return int(count), nil
 }

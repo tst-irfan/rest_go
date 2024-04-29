@@ -20,3 +20,12 @@ func ResponseSuccess[T any](c *gin.Context, message string, data T, statusCode i
 		Data:    data,
 	})
 }
+
+func ResponseSuccessWithMeta[T any](c *gin.Context, message string, data T, statusCode int, meta types.MetaData) {
+	c.JSON(statusCode, types.SuccessWithMeta[T]{
+		Success:  true,
+		Message:  message,
+		Data:     data,
+		MetaData: meta,
+	})
+}

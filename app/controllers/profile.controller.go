@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"rest_go/app/helpers"
 	"rest_go/app/services"
@@ -11,13 +12,29 @@ import (
 )
 
 func ShowAllProfiles(c *gin.Context) {
-	profiles, err := services.ShowAllProfiles()
+	var input types.GetProfilesRequest
+	var profiles []types.Profile
+	var err error
+	var metadata types.MetaData
+
+	if err := c.ShouldBindQuery(&input); err != nil {
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("input: %+v", input)
+	if input.Size == 0 {
+		profiles, err, metadata = services.ShowAllProfiles()
+	} else {
+		profiles, err, metadata = services.ShowAllProfilesWithPagination(input.Page, input.Size)
+	}
+
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	helpers.ResponseSuccess(c, "Profiles found", profiles, http.StatusOK)
+	helpers.ResponseSuccessWithMeta(c, "Profiles found", profiles, http.StatusOK, metadata)
 }
 
 func GetProfile(c *gin.Context) {

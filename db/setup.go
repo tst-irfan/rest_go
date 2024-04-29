@@ -17,7 +17,7 @@ func ConnectDataBase(env string) {
 	var envFile string
 
 	if env == "test" {
-		envFile = "../.env.test"
+		envFile = "../../.env.test"
 	} else {
 		envFile = ".env." + env
 	}

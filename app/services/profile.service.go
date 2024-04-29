@@ -5,13 +5,32 @@ import (
 	"rest_go/app/types"
 )
 
-func ShowAllProfiles() ([]types.Profile, error) {
+func ShowAllProfiles() ([]types.Profile, error, types.MetaData) {
 	profiles, err := models.ProfileQuery.FindAll()
+	totalItems, err := models.ProfileQuery.Count()
 	if err != nil {
-		return []types.Profile{}, err
+		return []types.Profile{}, err, types.MetaData{}
+	}
+	metaData := types.MetaData{
+		TotalItems: totalItems,
 	}
 
-	return models.BuildProfilesAttributes(profiles), nil
+	return models.BuildProfilesAttributes(profiles), nil, metaData
+}
+
+func ShowAllProfilesWithPagination(page, size int) ([]types.Profile, error, types.MetaData) {
+	profiles, err := models.ProfileQuery.FindAllWithPagination(page, size)
+	totalItems, err := models.ProfileQuery.Count()
+	if err != nil {
+		return []types.Profile{}, err, types.MetaData{}
+	}
+	metaData := types.MetaData{
+		TotalItems: totalItems,
+		Page:       page,
+		Size:       size,
+		TotalPages: totalItems / size,
+	}
+	return models.BuildProfilesAttributes(profiles), nil, metaData
 }
 
 func CreateProfile(input types.ProfileRequest, userID uint) (types.Profile, error) {
@@ -66,7 +85,7 @@ func UpdateProfile(input types.ProfileRequest, ID uint) (types.Profile, error) {
 }
 
 func DeleteProfile(userID uint) error {
-	profile, err :=  models.ProfileQuery.FindOneByColumn("user_id", userID)
+	profile, err := models.ProfileQuery.FindOneByColumn("user_id", userID)
 	if err != nil {
 		return err
 	}
