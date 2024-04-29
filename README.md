@@ -25,6 +25,7 @@
 - [Running the server](#running-the-server)
 - [Running the tests](#running-the-tests)
 - [Project Structure](#project-structure)
+- [Generator](#generator)
 
 
 
@@ -154,6 +155,39 @@ go test ./...
 - **.env.test:** Test environment file containing configurations specific to the test environment. It includes settings required for running tests, such as test database credentials or test-specific configurations.
 - **.env.staging:** Staging environment file containing configurations specific to the staging environment. It includes settings required for staging deployments, such as staging database credentials or staging-specific configurations.
 - **.env.production:** Production environment file containing configurations specific to the production environment. It includes settings required for production deployments, such as production database credentials or production-specific configurations.
+
+
+## Generator
+
+### Model Generator
+
+```bash
+generators/generators model <model_name> 
+```
+
+### Service Generator
+
+```bash
+generators/generators service <service_name>
+```
+
+### Controller Generator
+
+```bash
+generators/generators controller <controller_name>
+```
+
+### Router Generator
+
+```bash
+generators/generators router <router_name>
+```
+
+### Scaffold Generaotr (Model, Service, Controller, Router)
+
+```bash
+generators/generators scaffold <name>
+```
 
 
 ## Postman Collection

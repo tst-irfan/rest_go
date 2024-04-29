@@ -9,5 +9,6 @@ func AutoMigrate() {
 	db.DB.AutoMigrate(
 		&models.User{},
 		&models.Profile{},
+		&models.Product{},
 	)
 }

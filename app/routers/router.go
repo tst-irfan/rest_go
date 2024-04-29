@@ -13,6 +13,7 @@ func Router() *gin.Engine {
 
 	SetupAuthRoutes(public)
 	SetupProfileRoutes(public)
+	SetupProductRoutes(public)
 
 	return r
 }
