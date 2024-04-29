@@ -126,12 +126,12 @@ go test ./...
 ├── tests
 │   ├── factories
 │   ├── modles
-main.go
-.env
-.env.development
-.env.test
-.env.staging
-.env.production
+├── main.go
+├── .env
+├── .env.development
+├── .env.test
+├── .env.staging
+├── .env.production
 ```
 ### Directories
 
