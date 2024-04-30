@@ -7,14 +7,14 @@ import (
 )
 
 const modelDir = "app/models"
-const typeDir = "app/types"
+const autoMigratePath = "initializer/auto.migrate.go"
 
 func GenerateModel(input FileGenerator) error {
 	modelPath := filepath.Join(modelDir, fmt.Sprintf("%s.go", strings.ToLower(input.Name)))
 	modelName := strings.Title(input.Name)
 	content := ModelTemplate(modelName)
 	err := createFile(modelPath, content)
-	GenerateTypeFiles(modelName)
+	AppendAutoMigrate(modelName)
 	if err != nil {
 		return err
 	}
@@ -41,27 +41,23 @@ var %sValidation = helpers.ValidationHelper{
 	ShouldLessThanFields:    []helpers.Field{},
 }
 
-`, modelName, modelName, modelName, modelName)
+func (m *%s) BeforeSave() error {
+	_, err := %sValidation.Validate(m)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func GenerateTypeFiles(modelName string) {
-	typeRequestFileName := fmt.Sprintf("%s.type.go", strings.ToLower(modelName)+".request")
-	typeResponseFileName := fmt.Sprintf("%s.type.go", strings.ToLower(modelName)+".response")
-	GenerateTypeFile(modelName+"Request", typeRequestFileName)
-	GenerateTypeFile(modelName+"Response", typeResponseFileName)
+`, modelName, modelName, modelName, modelName, modelName, modelName)
 }
 
-func GenerateTypeFile(modelName string, fileName string) {
-	typePath := filepath.Join(typeDir, fileName)
-	content := TypeTemplate(modelName)
-	createFile(typePath, content)
-}
-
-func TypeTemplate(modelName string) string {
-	return fmt.Sprintf(`package types
-
-type %s struct {
-}
-
-`, modelName)
+func AppendAutoMigrate(modelName string) error {
+	autoMigrateContent := fmt.Sprintf(`
+		&models.%s{},`, modelName)
+	err := AppendContent(autoMigratePath, autoMigrateContent, "model")
+	if err != nil {
+		return err
+	}
+	return nil
 }

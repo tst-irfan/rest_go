@@ -67,7 +67,7 @@ func ControllerTemplate(controllerName string, controllerNameLower string) strin
 	}
 
 	func Create%S(c *gin.Context) {
-		var input types.%SRequest
+		var input models.%S
 		if err := c.ShouldBindJSON(&input); err != nil {
 			helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 			return
@@ -91,7 +91,7 @@ func ControllerTemplate(controllerName string, controllerNameLower string) strin
 			return
 		}
 	
-		var input types.%SRequest
+		var input models.%S
 		if err := c.ShouldBindJSON(&input); err != nil {
 			helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 			return

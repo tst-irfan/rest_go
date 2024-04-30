@@ -43,11 +43,7 @@ func ServiceTemplate(serviceName string, serviceNameLower string) string {
 		return %ss, nil, metaData
 	}
 	
-	func Create%S(input types.%SRequest) (models.%S, error) {
-		%s := models.%S{
-			// Add your fields here
-		}
-	
+	func Create%S(%s models.%S) (models.%S, error) {
 		created%S, err := models.%SQuery.Create(%s)
 		if err != nil {
 			return models.%S{}, err
@@ -65,15 +61,15 @@ func ServiceTemplate(serviceName string, serviceNameLower string) string {
 		return *%s, nil
 	}
 	
-	func Update%S(ID uint, input types.%SRequest) (models.%S, error) {
+	func Update%S(ID uint, %sParams models.%S) (models.%S, error) {
 		%s, err := models.%SQuery.FindByID(ID)
 		if err != nil {
 			return models.%S{}, err
 		}
 	
-		// Add your fields here
+		%sParams.ID = %s.ID
 	
-		updated%S, err := models.%SQuery.Update(*%s)
+		updated%S, err := models.%SQuery.Update(%sParams)
 		if err != nil {
 			return models.%S{}, err
 		}

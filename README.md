@@ -159,6 +159,12 @@ go test ./...
 
 ## Generator
 
+### Build Generator
+
+```bash
+go build -o generators/generators generators/main.go
+```
+
 ### Model Generator
 
 ```bash
