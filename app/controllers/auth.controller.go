@@ -10,6 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register godoc
+// @Summary Register a new user
+// @Description Register a new user
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param input body AuthRequest true "User input"
+// @Success 201 {object} UserResponse
+// @Router /register [post]
 func Register(c *gin.Context) {
 	var input AuthRequest
 
@@ -18,6 +27,7 @@ func Register(c *gin.Context) {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
+	println(input.Email)
 	user, err := services.RegisterUser(input)
 
 	if err != nil {
@@ -28,6 +38,15 @@ func Register(c *gin.Context) {
 	helpers.ResponseSuccess(c, "User has been created", user, http.StatusCreated)
 }
 
+// Login godoc
+// @Summary Login a user
+// @Description Login a user
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param input body AuthRequest true "User input"
+// @Success 200 {object} LoginResponse
+// @Router /login [post]
 func Login(c *gin.Context) {
 	var input AuthRequest
 

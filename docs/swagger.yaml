@@ -1,0 +1,244 @@
+definitions:
+  types.AuthRequest:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  types.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  types.Profile:
+    properties:
+      dob:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      user:
+        $ref: '#/definitions/types.UserResponse'
+    type: object
+  types.ProfileRequest:
+    properties:
+      dob:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+    required:
+    - dob
+    - first_name
+    - last_name
+    type: object
+  types.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user
+      parameters:
+      - description: User input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.LoginResponse'
+      summary: Login a user
+      tags:
+      - auth
+  /my-profile:
+    get:
+      consumes:
+      - application/json
+      description: get my profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Profile'
+      security:
+      - Bearer: []
+      summary: Show my profile
+      tags:
+      - profile
+  /profiles:
+    get:
+      consumes:
+      - application/json
+      description: get all profiles
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/types.Profile'
+            type: array
+      security:
+      - Bearer: []
+      summary: Show all profiles
+      tags:
+      - profile
+    post:
+      consumes:
+      - application/json
+      description: Save a profile
+      parameters:
+      - description: Profile input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.ProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.Profile'
+      security:
+      - Bearer: []
+      summary: Save a profile
+      tags:
+      - profile
+    put:
+      consumes:
+      - application/json
+      description: Update a profile
+      parameters:
+      - description: Profile input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.ProfileRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Profile'
+      security:
+      - Bearer: []
+      summary: Update a profile
+      tags:
+      - profile
+  /profiles/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a profile
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: Delete a profile
+      tags:
+      - profile
+    get:
+      consumes:
+      - application/json
+      description: get a profile by id
+      parameters:
+      - description: Profile ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Profile'
+      security:
+      - Bearer: []
+      summary: Get a profile
+      tags:
+      - profile
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: User input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.AuthRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.UserResponse'
+      summary: Register a new user
+      tags:
+      - auth
+securityDefinitions:
+  Bearer:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

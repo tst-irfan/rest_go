@@ -13,7 +13,7 @@
 
 ---
 
-<p align="center"> A simple GO REST API with Gin and Gorm
+<p align="center"> The easiest way to build a REST API with Go
     <br> 
 </p>
 
@@ -122,6 +122,7 @@ go test ./...
 │   ├── query.go
 │   ├── setup.go
 ├── initializers
+├── initializers
 │   ├── application.go
 │   ├── auto.migrate.go
 ├── tests
@@ -143,6 +144,7 @@ go test ./...
 - **types:** Stores type definitions that are shared and used throughout the application, ensuring consistency and clarity.
 - **middlewares:** This directory holds middleware functions used to intercept and process incoming requests before they reach the main application logic.
 - **routers:** Here, you'll find router configurations responsible for directing incoming requests to the appropriate controllers or handlers.
+- **docs**: Contains configuration files for Swagger documentation generation, enabling the automatic generation of API documentation.
 
 ### Files
 - **main.go:** Serves as the entry point for the application, orchestrating the initialization and startup processes.
@@ -168,7 +170,13 @@ go build -o generators/generators generators/main.go
 ### Model Generator
 
 ```bash
-generators/generators model <model_name> 
+generators/generators model <model_name> <field:type> <field:type> ...
+```
+
+example
+
+```bash
+generators/generators model user name:string email:string password:string
 ```
 
 ### Service Generator
@@ -192,9 +200,18 @@ generators/generators router <router_name>
 ### Scaffold Generaotr (Model, Service, Controller, Router)
 
 ```bash
-generators/generators scaffold <name>
+generators/generators scaffold <name> <field:type> <field:type> ...
 ```
 
+example
+
+```bash
+generators/generators scaffold user name:string email:string password:string
+```
+
+## Swagger Documentation
+
+  [http://localhost:8080/swagger/index.html](http://localhost:8080/swagger/index.html)
 
 ## Postman Collection
   

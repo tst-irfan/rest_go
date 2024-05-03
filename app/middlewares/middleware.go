@@ -16,4 +16,5 @@ func Middleware() gin.HandlerFunc {
 var skipAuth = map[string]bool{
 	"/api/register": true,
 	"/api/login":    true,
+	"/swagger/*any": true,
 }
