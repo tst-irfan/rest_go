@@ -80,6 +80,12 @@ cp .env.example .env.staging
 cp .env.example .env.production
 ```
 
+### Generate swagger documentation
+
+```bash
+swag init --parseDependency --parseInternal
+```
+
 ### Running the server
 
 you can run the server by running the following command
