@@ -35,20 +35,11 @@ var profileValidation = helpers.ValidationHelper{
 	},
 }
 
-func GetUser(userID uint) *User {
-	user, err := UserQuery.FindByID(userID)
-	if err != nil {
-		return &User{}
+func (p *Profile) AfterFind() {
+	user, err := UserQuery.FindByID(p.UserID)
+	if err == nil {
+		p.User = *user
 	}
-	return user
-}
-
-func (profile *Profile) GetUser() *User {
-	user, err := UserQuery.FindByID(profile.UserID)
-	if err != nil {
-		return &User{}
-	}
-	return user
 }
 
 func (p *Profile) BeforeCreate() error {
@@ -98,8 +89,7 @@ func (p *Profile) BeforeUpdate() error {
 }
 
 func BuildProfileAttributes(profile *Profile) types.Profile {
-	user := profile.GetUser()
-	userAttributes := BuildUserAtributes(user)
+	userAttributes := BuildUserAtributes(&profile.User)
 	return types.Profile{
 		Id:        profile.ID,
 		FirstName: profile.FirstName,
