@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"rest_go/generators/lib"
+	"rest_go/generators/types"
 	"strings"
 )
 
@@ -17,14 +18,13 @@ func main() {
 
 	typeName := args[1]
 	name := args[2]
-	fieldArgs := []lib.FieldArgs{}
-	
+	fieldArgs := []types.FieldArgs{}
 
 	if len(args) > 2 {
 		for i := 3; i < len(args); i++ {
 			arg := args[i]
-			argSplit :=  strings.Split(arg, ":")
-			field, err := lib.NewFieldArgs(argSplit[0], argSplit[1])
+			argSplit := strings.Split(arg, ":")
+			field, err := types.NewFieldArgs(argSplit[0], argSplit[1])
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -32,37 +32,32 @@ func main() {
 		}
 	}
 
-	fileGenerator := lib.FileGenerator{
-		Name: name,
-		Type: typeName,
-	}
-
 	switch typeName {
 	case "model":
-		err := lib.GenerateModel(fileGenerator, fieldArgs)
+		err := lib.GenerateModel(name, fieldArgs)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "service":
-		err := lib.GenerateService(fileGenerator)
+		err := lib.GenerateService(name)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "controller":
-		err := lib.GenerateController(fileGenerator)
+		err := lib.GenerateController(name)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "router":
-		err := lib.GenerateRouter(fileGenerator)
+		err := lib.GenerateRouter(name)
 		if err != nil {
 			log.Fatal(err)
 		}
 	case "scaffold":
-		err := lib.GenerateModel(fileGenerator, fieldArgs)
-		err =  lib.GenerateService(fileGenerator)
-		err =  lib.GenerateController(fileGenerator)
-		err =  lib.GenerateRouter(fileGenerator)
+		err := lib.GenerateModel(name, fieldArgs)
+		err = lib.GenerateService(name)
+		err = lib.GenerateController(name)
+		err = lib.GenerateRouter(name)
 		if err != nil {
 			log.Fatal(err)
 		}

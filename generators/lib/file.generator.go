@@ -6,11 +6,6 @@ import (
 	"strings"
 )
 
-type FileGenerator struct {
-	Name string
-	Type string
-}
-
 func createFile(filePath, content string) error {
 	file, err := os.Create(filePath)
 	if err != nil {

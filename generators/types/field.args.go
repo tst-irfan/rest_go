@@ -1,4 +1,4 @@
-package lib
+package types
 
 import (
 	"errors"
@@ -19,7 +19,7 @@ var dataTypes = map[string]string{
 
 func ValidateDataType(dataType string) error {
 	if _, ok := dataTypes[dataType]; !ok {
-		return errors.New("Invalid data type")
+		return errors.New("invalid data type")
 	}
 	return nil
 }
