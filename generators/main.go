@@ -38,6 +38,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		err = lib.GenerateRequest(name, fieldArgs)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case "service":
 		err := lib.GenerateService(name)
 		if err != nil {
@@ -55,9 +59,22 @@ func main() {
 		}
 	case "scaffold":
 		err := lib.GenerateModel(name, fieldArgs)
+		if err != nil {
+			log.Fatal(err)
+		}
 		err = lib.GenerateService(name)
+		if err != nil {
+			log.Fatal(err)
+		}
 		err = lib.GenerateController(name)
+		if err != nil {
+			log.Fatal(err)
+		}
 		err = lib.GenerateRouter(name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		err = lib.GenerateRequest(name, fieldArgs)
 		if err != nil {
 			log.Fatal(err)
 		}

@@ -15,6 +15,7 @@ import (
 	"rest_go/app/services"
 	"rest_go/app/types"
 	"rest_go/app/models"
+	"rest_go/app/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -80,19 +81,20 @@ func Get{{.ControllerName}}(c *gin.Context) {
 // @Tags {{.ControllerName}}
 // @Accept  json
 // @Produce  json
-// @Param input body models.{{.ControllerName}} true "User input"
+// @Param input body types.{{.ControllerName}}Request true "User input"
 // @Success 201 {object} types.Success[models.{{.ControllerName}}]
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s [post]
 // @Security Bearer
 func Create{{.ControllerName}}(c *gin.Context) {
-	var input models.{{.ControllerName}}
+	var input types.{{.ControllerName}}Request
 	if err := c.ShouldBindJSON(&input); err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
+	{{.ControllerNameLower}}Params, err := utils.TypeConverter[models.{{.ControllerName}}](&input)
 
-	{{.ControllerNameLower}}, err := services.Create{{.ControllerName}}(input)
+	{{.ControllerNameLower}}, err := services.Create{{.ControllerName}}(*{{.ControllerNameLower}}Params)
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -109,7 +111,7 @@ func Create{{.ControllerName}}(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param id path int true "{{.ControllerName}} ID"
-// @Param input body models.{{.ControllerName}} true "User input"
+// @Param input body types.{{.ControllerName}}Request true "User input"
 // @Success 200 {object} types.Success[models.{{.ControllerName}}]
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s/{id} [put]
@@ -122,13 +124,19 @@ func Update{{.ControllerName}}(c *gin.Context) {
 		return
 	}
 
-	var input models.{{.ControllerName}}
+	var input types.{{.ControllerName}}Request
 	if err := c.ShouldBindJSON(&input); err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	{{.ControllerNameLower}}, err := services.Update{{.ControllerName}}(uint(ID), input)
+	{{.ControllerNameLower}}Params, err := utils.TypeConverter[models.{{.ControllerName}}](&input)
+	if err != nil {
+		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	{{.ControllerNameLower}}, err := services.Update{{.ControllerName}}(uint(ID), *{{.ControllerNameLower}}Params)
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
