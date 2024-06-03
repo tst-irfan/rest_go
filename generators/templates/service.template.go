@@ -12,17 +12,32 @@ package services
 import (
 	"rest_go/app/models"
 	"rest_go/app/types"
+	"sync"
 )
 
 func ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData) {
-	{{.ServiceNameLower}}s, err := models.{{.ServiceName}}Query.FindAll()
+	var wg sync.WaitGroup
+
+	var {{.ServiceNameLower}}s []models.{{.ServiceName}}
+	var totalItems int
+	var err error
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		{{.ServiceNameLower}}s, err = models.{{.ServiceName}}Query.FindAll()
+	}()
+	go func() {
+		defer wg.Done()
+		totalItems, err = models.{{.ServiceName}}Query.Count()
+	}()
+	
+	wg.Wait()
+
 	if err != nil {
-		return nil, err, types.MetaData{}
+		return []models.{{.ServiceName}}{}, err, types.MetaData{}
 	}
-	totalItems, err := models.{{.ServiceName}}Query.Count()
-	if err != nil {
-		return nil, err, types.MetaData{}
-	}
+
 	metaData := types.MetaData{
 		TotalItems: totalItems,
 	}
