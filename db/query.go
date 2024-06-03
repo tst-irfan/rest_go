@@ -6,6 +6,21 @@ type QueryHelper[T any] struct {
 	Model T
 }
 
+type QueryHelperInterface[T any] interface {
+	FindAll() ([]T, error)
+	FindAllWithPagination(page int, size int) ([]T, error)
+	FindByID(ID uint) (*T, error)
+	Create(data T) (*T, error)
+	Update(data T) (*T, error)
+	DeleteByID(ID uint) error
+	FindOneByColumn(column string, value interface{}) (*T, error)
+	FindManyByColumn(column string, value interface{}) ([]T, error)
+	Where(query interface{}, args ...interface{}) ([]T, error)
+	FirstWhere(query interface{}, args ...interface{}) (*T, error)
+	DeleteWhere(query interface{}, args ...interface{}) error
+	Count() (int, error)
+}
+
 func (qh *QueryHelper[T]) FindAll() ([]T, error) {
 	var results []T
 	err := DB.Find(&results).Error
