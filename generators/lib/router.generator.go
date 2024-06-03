@@ -14,7 +14,7 @@ func GenerateRouter(name string) error {
 	routerPath := filepath.Join(routerDir, fmt.Sprintf("setup_%s.router.go", strings.ToLower(name)))
 	routerName := strings.Title(name)
 	content := templates.RouterTemplate(routerName)
-	err := createFile(routerPath, content)
+	err := CreateFile(routerPath, content)
 	if err != nil {
 		return err
 	}

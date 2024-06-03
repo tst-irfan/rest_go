@@ -15,11 +15,12 @@ import (
 )
 
 func Setup{{.RouterName}}Routes(r *gin.RouterGroup) {
-	r.GET("/{{.RouterNameLower}}s", controllers.GetAll{{.RouterName}}s)
-	r.GET("/{{.RouterNameLower}}s/:id", controllers.Get{{.RouterName}})
-	r.POST("/{{.RouterNameLower}}s", controllers.Create{{.RouterName}})
-	r.PUT("/{{.RouterNameLower}}s/:id", controllers.Update{{.RouterName}})
-	r.DELETE("/{{.RouterNameLower}}s/:id", controllers.Delete{{.RouterName}})
+	controller := controllers.New{{.RouterName}}Controller()
+	r.GET("/{{.RouterNameLower}}s", controller.GetAll{{.RouterName}}s)
+	r.GET("/{{.RouterNameLower}}s/:id", controller.Get{{.RouterName}})
+	r.POST("/{{.RouterNameLower}}s", controller.Create{{.RouterName}})
+	r.PUT("/{{.RouterNameLower}}s/:id", controller.Update{{.RouterName}})
+	r.DELETE("/{{.RouterNameLower}}s/:id", controller.Delete{{.RouterName}})
 }
 
 `))

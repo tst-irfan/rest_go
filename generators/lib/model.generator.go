@@ -3,9 +3,9 @@ package lib
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 	"rest_go/generators/templates"
 	"rest_go/generators/types"
+	"strings"
 )
 
 const modelDir = "app/models"
@@ -15,14 +15,13 @@ func GenerateModel(name string, fieldArgs []types.FieldArgs) error {
 	modelPath := filepath.Join(modelDir, fmt.Sprintf("%s.go", strings.ToLower(name)))
 	modelName := strings.Title(name)
 	content := templates.ModelTemplate(modelName, fieldArgs)
-	err := createFile(modelPath, content)
+	err := CreateFile(modelPath, content)
 	AppendAutoMigrate(modelName)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-
 
 func AppendAutoMigrate(modelName string) error {
 	autoMigrateContent := fmt.Sprintf(`
@@ -33,4 +32,3 @@ func AppendAutoMigrate(modelName string) error {
 	}
 	return nil
 }
-

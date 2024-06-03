@@ -13,7 +13,7 @@ func GenerateController(name string) error {
 	controllerPath := filepath.Join(controllerDir, fmt.Sprintf("%s.controller.go", strings.ToLower(name)))
 	controllerName := strings.Title(name)
 	content := templates.ControllerTemplate(controllerName)
-	err := createFile(controllerPath, content)
+	err := CreateFile(controllerPath, content)
 	if err != nil {
 		return err
 	}

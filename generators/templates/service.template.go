@@ -13,9 +13,26 @@ import (
 	"rest_go/app/models"
 	"rest_go/app/types"
 	"sync"
+	"rest_go/db"
 )
 
-func ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData) {
+type {{.ServiceName}}Service struct {
+	Query db.QueryHelperInterface[models.{{.ServiceName}}]
+}
+
+type {{.ServiceName}}ServiceInterface interface {
+	ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData)
+	Create{{.ServiceName}}(models.{{.ServiceName}}) (models.{{.ServiceName}}, error)
+	Get{{.ServiceName}}ByID(uint) (models.{{.ServiceName}}, error)
+	Update{{.ServiceName}}(uint, models.{{.ServiceName}}) (models.{{.ServiceName}}, error)
+	Delete{{.ServiceName}}(uint) error
+}
+
+func New{{.ServiceName}}Service() *{{.ServiceName}}Service {
+	return &{{.ServiceName}}Service{Query: &models.{{.ServiceName}}Query}
+}
+
+func (s *PostService) ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData) {
 	var wg sync.WaitGroup
 
 	var {{.ServiceNameLower}}s []models.{{.ServiceName}}
@@ -25,11 +42,11 @@ func ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		{{.ServiceNameLower}}s, err = models.{{.ServiceName}}Query.FindAll()
+		{{.ServiceNameLower}}s, err = s.Query.FindAll()
 	}()
 	go func() {
 		defer wg.Done()
-		totalItems, err = models.{{.ServiceName}}Query.Count()
+		totalItems, err = s.Query.Count()
 	}()
 	
 	wg.Wait()
@@ -45,8 +62,8 @@ func ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData
 	return {{.ServiceNameLower}}s, nil, metaData
 }
 
-func Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
-	created{{.ServiceName}}, err := models.{{.ServiceName}}Query.Create({{.ServiceNameLower}})
+func (s *PostService) Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
+	created{{.ServiceName}}, err := s.Query.Create({{.ServiceNameLower}})
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
 	}
@@ -54,8 +71,8 @@ func Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.ServiceName}}) (mode
 	return *created{{.ServiceName}}, nil
 }
 
-func Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}}, error) {
-	{{.ServiceNameLower}}, err := models.{{.ServiceName}}Query.FindByID(ID)
+func (s *PostService) Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}}, error) {
+	{{.ServiceNameLower}}, err := s.Query.FindByID(ID)
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
 	}
@@ -63,15 +80,15 @@ func Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}}, error) {
 	return *{{.ServiceNameLower}}, nil
 }
 
-func Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Params models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
-	{{.ServiceNameLower}}, err := models.{{.ServiceName}}Query.FindByID(ID)
+func (s *PostService) Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Params models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
+	{{.ServiceNameLower}}, err := s.Query.FindByID(ID)
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
 	}
 
 	{{.ServiceNameLower}}Params.ID = {{.ServiceNameLower}}.ID
 
-	updated{{.ServiceName}}, err := models.{{.ServiceName}}Query.Update({{.ServiceNameLower}}Params)
+	updated{{.ServiceName}}, err := s.Query.Update({{.ServiceNameLower}}Params)
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
 	}
@@ -79,8 +96,8 @@ func Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Params models.{{.Servi
 	return *updated{{.ServiceName}}, nil
 }
 
-func Delete{{.ServiceName}}(ID uint) error {
-	err := models.{{.ServiceName}}Query.DeleteByID(ID)
+func (s *PostService) Delete{{.ServiceName}}(ID uint) error {
+	err := s.Query.DeleteByID(ID)
 	if err != nil {
 		return err
 	}

@@ -21,6 +21,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type {{.ControllerName}}Controller struct {
+	Service services.{{.ControllerName}}ServiceInterface
+}
+
+func New{{.ControllerName}}Controller() {{.ControllerName}}Controller {
+	return {{.ControllerName}}Controller{Service: services.New{{.ControllerName}}Service()}
+}
+
 // Show All {{.ControllerName}}s godoc
 // @Summary Show all {{.ControllerNameLower}}s
 // @Description get all {{.ControllerNameLower}}s
@@ -31,12 +39,12 @@ import (
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s [get]
 // @Security Bearer
-func GetAll{{.ControllerName}}s(c *gin.Context) {
+func (con *{{.ControllerName}}Controller) GetAll{{.ControllerName}}s(c *gin.Context) {
 	var {{.ControllerNameLower}}s []models.{{.ControllerName}}
 	var err error
 	var metadata types.MetaData
 
-	{{.ControllerNameLower}}s, err, metadata = services.ShowAll{{.ControllerName}}()
+	{{.ControllerNameLower}}s, err, metadata = con.Service.ShowAll{{.ControllerName}}()
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -57,7 +65,7 @@ func GetAll{{.ControllerName}}s(c *gin.Context) {
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s/{id} [get]
 // @Security Bearer
-func Get{{.ControllerName}}(c *gin.Context) {
+func (con *{{.ControllerName}}Controller) Get{{.ControllerName}}(c *gin.Context) {
 	IDStr := c.Param("id")
 	ID, err := strconv.ParseUint(IDStr, 10, 64)
 	if err != nil {
@@ -65,7 +73,7 @@ func Get{{.ControllerName}}(c *gin.Context) {
 		return
 	}
 
-	{{.ControllerNameLower}}, err := services.Get{{.ControllerName}}ByID(uint(ID))
+	{{.ControllerNameLower}}, err := con.Service.Get{{.ControllerName}}ByID(uint(ID))
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -86,7 +94,7 @@ func Get{{.ControllerName}}(c *gin.Context) {
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s [post]
 // @Security Bearer
-func Create{{.ControllerName}}(c *gin.Context) {
+func (con *{{.ControllerName}}Controller) Create{{.ControllerName}}(c *gin.Context) {
 	var input types.{{.ControllerName}}Request
 	if err := c.ShouldBindJSON(&input); err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -94,7 +102,7 @@ func Create{{.ControllerName}}(c *gin.Context) {
 	}
 	{{.ControllerNameLower}}Params, err := utils.TypeConverter[models.{{.ControllerName}}](&input)
 
-	{{.ControllerNameLower}}, err := services.Create{{.ControllerName}}(*{{.ControllerNameLower}}Params)
+	{{.ControllerNameLower}}, err := con.Service.Create{{.ControllerName}}(*{{.ControllerNameLower}}Params)
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -116,7 +124,7 @@ func Create{{.ControllerName}}(c *gin.Context) {
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s/{id} [put]
 // @Security Bearer
-func Update{{.ControllerName}}(c *gin.Context) {
+func (con *{{.ControllerName}}Controller) Update{{.ControllerName}}(c *gin.Context) {
 	IDStr := c.Param("id")
 	ID, err := strconv.ParseUint(IDStr, 10, 64)
 	if err != nil {
@@ -136,7 +144,7 @@ func Update{{.ControllerName}}(c *gin.Context) {
 		return
 	}
 
-	{{.ControllerNameLower}}, err := services.Update{{.ControllerName}}(uint(ID), *{{.ControllerNameLower}}Params)
+	{{.ControllerNameLower}}, err := con.Service.Update{{.ControllerName}}(uint(ID), *{{.ControllerNameLower}}Params)
 
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
@@ -157,7 +165,7 @@ func Update{{.ControllerName}}(c *gin.Context) {
 // @Failure 400 {object} types.Error
 // @Router /{{.ControllerNameLower}}s/{id} [delete]
 // @Security Bearer
-func Delete{{.ControllerName}}(c *gin.Context) {
+func (con *{{.ControllerName}}Controller) Delete{{.ControllerName}}(c *gin.Context) {
 	IDStr := c.Param("id")
 	ID, err := strconv.ParseUint(IDStr, 10, 64)
 	if err != nil {
@@ -165,7 +173,7 @@ func Delete{{.ControllerName}}(c *gin.Context) {
 		return
 	}
 
-	err = services.Delete{{.ControllerName}}(uint(ID))
+	err = con.Service.Delete{{.ControllerName}}(uint(ID))
 	if err != nil {
 		helpers.ResponseError(c, err.Error(), http.StatusBadRequest)
 		return

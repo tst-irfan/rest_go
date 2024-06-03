@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func createFile(filePath, content string) error {
+func CreateFile(filePath, content string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
