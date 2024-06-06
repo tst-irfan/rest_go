@@ -1,4 +1,26 @@
 definitions:
+  models.Post:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  rest_go_app_types.Error:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
   types.AuthRequest:
     properties:
       email:
@@ -13,6 +35,24 @@ definitions:
   types.LoginResponse:
     properties:
       token:
+        type: string
+    type: object
+  types.MetaData:
+    properties:
+      page:
+        type: integer
+      size:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  types.PostRequest:
+    properties:
+      content:
+        type: string
+      title:
         type: string
     type: object
   types.Profile:
@@ -40,6 +80,28 @@ definitions:
     - dob
     - first_name
     - last_name
+    type: object
+  types.Success-models_Post:
+    properties:
+      data:
+        $ref: '#/definitions/models.Post'
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  types.SuccessWithMeta-array_models_Post:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Post'
+        type: array
+      message:
+        type: string
+      meta:
+        $ref: '#/definitions/types.MetaData'
+      success:
+        type: boolean
     type: object
   types.UserResponse:
     properties:
@@ -94,6 +156,139 @@ paths:
       summary: Show my profile
       tags:
       - profile
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: get all posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.SuccessWithMeta-array_models_Post'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_go_app_types.Error'
+      security:
+      - Bearer: []
+      summary: Show all posts
+      tags:
+      - Post
+    post:
+      consumes:
+      - application/json
+      description: create a post
+      parameters:
+      - description: User input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.Success-models_Post'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_go_app_types.Error'
+      security:
+      - Bearer: []
+      summary: Create a post
+      tags:
+      - Post
+  /posts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_go_app_types.Error'
+      security:
+      - Bearer: []
+      summary: Delete a post
+      tags:
+      - Post
+    get:
+      consumes:
+      - application/json
+      description: get a post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Success-models_Post'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_go_app_types.Error'
+      security:
+      - Bearer: []
+      summary: Get a post
+      tags:
+      - Post
+    put:
+      consumes:
+      - application/json
+      description: update a post by id
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.PostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.Success-models_Post'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest_go_app_types.Error'
+      security:
+      - Bearer: []
+      summary: Update a post
+      tags:
+      - Post
   /profiles:
     get:
       consumes:
