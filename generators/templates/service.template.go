@@ -32,7 +32,7 @@ func New{{.ServiceName}}Service() *{{.ServiceName}}Service {
 	return &{{.ServiceName}}Service{Query: &models.{{.ServiceName}}Query}
 }
 
-func (s *PostService) ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData) {
+func (s *{{.ServiceName}}Service) ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, error, types.MetaData) {
 	var wg sync.WaitGroup
 
 	var {{.ServiceNameLower}}s []models.{{.ServiceName}}
@@ -62,7 +62,7 @@ func (s *PostService) ShowAll{{.ServiceName}}() ([]models.{{.ServiceName}}, erro
 	return {{.ServiceNameLower}}s, nil, metaData
 }
 
-func (s *PostService) Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
+func (s *{{.ServiceName}}Service) Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
 	created{{.ServiceName}}, err := s.Query.Create({{.ServiceNameLower}})
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
@@ -71,7 +71,7 @@ func (s *PostService) Create{{.ServiceName}}({{.ServiceNameLower}} models.{{.Ser
 	return *created{{.ServiceName}}, nil
 }
 
-func (s *PostService) Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}}, error) {
+func (s *{{.ServiceName}}Service) Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}}, error) {
 	{{.ServiceNameLower}}, err := s.Query.FindByID(ID)
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
@@ -80,7 +80,7 @@ func (s *PostService) Get{{.ServiceName}}ByID(ID uint) (models.{{.ServiceName}},
 	return *{{.ServiceNameLower}}, nil
 }
 
-func (s *PostService) Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Params models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
+func (s *{{.ServiceName}}Service) Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Params models.{{.ServiceName}}) (models.{{.ServiceName}}, error) {
 	{{.ServiceNameLower}}, err := s.Query.FindByID(ID)
 	if err != nil {
 		return models.{{.ServiceName}}{}, err
@@ -96,7 +96,7 @@ func (s *PostService) Update{{.ServiceName}}(ID uint, {{.ServiceNameLower}}Param
 	return *updated{{.ServiceName}}, nil
 }
 
-func (s *PostService) Delete{{.ServiceName}}(ID uint) error {
+func (s *{{.ServiceName}}Service) Delete{{.ServiceName}}(ID uint) error {
 	err := s.Query.DeleteByID(ID)
 	if err != nil {
 		return err
