@@ -164,8 +164,11 @@ go test ./...
 - **.env.staging:** Staging environment file containing configurations specific to the staging environment. It includes settings required for staging deployments, such as staging database credentials or staging-specific configurations.
 - **.env.production:** Production environment file containing configurations specific to the production environment. It includes settings required for production deployments, such as production database credentials or production-specific configurations.
 
+![application diagram](./readme/app-diagram.png)
 
 ## Generator
+
+![generator diagram](./readme/generator-diagram.png)
 
 ### Build Generator
 
