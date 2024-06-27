@@ -168,7 +168,6 @@ go test ./...
 
 ## Generator
 
-![generator diagram](./readme/generator-diagram.png)
 
 ### Build Generator
 

@@ -34,52 +34,43 @@ func main() {
 
 	switch typeName {
 	case "model":
-		err := lib.GenerateModel(name, fieldArgs)
-		if err != nil {
+		if err := lib.Generate(name, "model", fieldArgs); err != nil {
 			log.Fatal(err)
 		}
-		err = lib.GenerateRequest(name, fieldArgs)
-		if err != nil {
+		if err := lib.Generate(name, "request", fieldArgs); err != nil {
 			log.Fatal(err)
 		}
 	case "service":
-		err := lib.GenerateService(name)
-		if err != nil {
+		if err := lib.Generate(name, "service", nil); err != nil {
 			log.Fatal(err)
 		}
 	case "controller":
-		err := lib.GenerateController(name)
-		if err != nil {
+		if err := lib.Generate(name, "controller", nil); err != nil {
 			log.Fatal(err)
 		}
 	case "router":
-		err := lib.GenerateRouter(name)
-		if err != nil {
+		if err := lib.Generate(name, "router", nil); err != nil {
 			log.Fatal(err)
 		}
 	case "scaffold":
-		err := lib.GenerateModel(name, fieldArgs)
-		if err != nil {
+		if err := lib.Generate(name, "model", fieldArgs); err != nil {
 			log.Fatal(err)
 		}
-		err = lib.GenerateService(name)
-		if err != nil {
+		if err := lib.Generate(name, "service", nil); err != nil {
 			log.Fatal(err)
 		}
-		err = lib.GenerateController(name)
-		if err != nil {
+		if err := lib.Generate(name, "controller", nil); err != nil {
 			log.Fatal(err)
 		}
-		err = lib.GenerateRouter(name)
-		if err != nil {
+		if err := lib.Generate(name, "router", nil); err != nil {
 			log.Fatal(err)
 		}
-		err = lib.GenerateRequest(name, fieldArgs)
-		if err != nil {
+		if err := lib.Generate(name, "request", fieldArgs); err != nil {
 			log.Fatal(err)
 		}
 	default:
 		fmt.Println("Unknown type")
 	}
+	
 
 }
